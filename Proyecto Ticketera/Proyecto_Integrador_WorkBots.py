@@ -25,7 +25,8 @@ def establecer_conexion():
     except (Exception, psycopg2.Error) as error:
         print("Error al conectar a la base de datos:", error)
 
-#funcion para crear las tablas en la base de datos
+
+# funcion para crear las tablas en la base de datos
 def crear_tablas():
     conexion = establecer_conexion()
     if conexion is not None:
@@ -76,6 +77,7 @@ def crear_tablas():
                 conexion.close()
                 print("Conexión cerrada")
 
+
 # Función para obtener precio del producto
 def obtener_precio_producto(producto_id):
     conexion = establecer_conexion()
@@ -99,7 +101,7 @@ def obtener_precio_producto(producto_id):
                 print("Conexión cerrada")
 
 
-#funcion para obtener la descripcion del producto
+# funcion para obtener la descripcion del producto
 def obtener_descripcion_producto(producto_id):
     conexion = establecer_conexion()
 
@@ -145,6 +147,7 @@ def insertar_cliente(nombre):
                 conexion.close()
                 print("Conexión cerrada")
 
+
 # Función para insertar una venta en la base de datos
 def insertar_venta(id_cliente, id_producto, cantidad):
     conexion = establecer_conexion()
@@ -168,6 +171,7 @@ def insertar_venta(id_cliente, id_producto, cantidad):
                 conexion.close()
                 print("Conexión cerrada")
 
+
 # Función para agregar un producto al carrito de compras
 def agregar_producto(productos: List[Producto]):
     producto_id = input('Ingrese el id del producto: ')
@@ -177,14 +181,15 @@ def agregar_producto(productos: List[Producto]):
     producto = Producto(descripcion, precio, cantidad)
     productos.append(producto)
 
-#funcion para solicitar indice que se usa para cambiar o borrar producto
+
+# funcion para solicitar indice que se usa para cambiar o borrar producto
 def solicitarIndice():
     return int(input("Ingresa el número de producto (el primero es 0): "))
 
-#funcion para cambiar cantidad del producto
+
+# funcion para cambiar cantidad del producto
 def cambiarCantidad(productos: List[Producto]):
     indice = solicitarIndice()
-
 
     if indice < len(productos):
         for producto in productos:
@@ -195,3 +200,65 @@ def cambiarCantidad(productos: List[Producto]):
             productos[indice] = p
     else:
         print("Numero erroneo, producto no encontrado")
+
+
+# Funcion para quitar productos de la base de datos
+def quitarProducto(productos: List[Producto]):
+    indice = solicitarIndice()
+
+    if indice < len(productos):
+        productos.pop(indice)
+    else:
+        print("Número erroneo, intente nuevamente")
+
+
+# Funcion para agregar productos a la base de datos
+def AgregarProdBD():
+    conexion = establecer_conexion()
+    try:
+        with conexion:
+            with conexion.cursor() as cursor:
+                sentencia = 'INSERT INTO productos (descripcion, precio) VALUES (%s, %s) '
+                valores = (input("Ingreso de producto nuevo\nIngrese nombre de producto: "),
+                           input('Ingrese precio del producto: '))
+                cursor.execute(sentencia, valores)
+                registros_insertados = cursor.rowcount
+                print(f'El producto insertado es: {registros_insertados}')
+    except Exception as e:
+        print(f'Ocurrio un error: {e}')
+    finally:
+        conexion.close()
+
+
+# Funcion para ver los productos cargados a la base de datos
+def VerProdBD():
+    conexion = establecer_conexion()
+    try:
+        with conexion:
+            with conexion.cursor() as cursor:
+                sentencia = 'SELECT * FROM productos '
+                cursor.execute(sentencia)  # De esta manera ejecutamos la sentencia
+                registros_leidos = cursor.fetchall()
+                print(f'El producto leido es: {registros_leidos}')
+    except Exception as e:
+        print(f'Ocurrio un error: {e}')
+    finally:
+        conexion.close()
+
+
+# Funcion para borrar los productos de la base de datos
+def BorrarProdBD():
+    conexion = establecer_conexion()
+    try:
+        with conexion:
+            with conexion.cursor() as cursor:
+                sentencia = 'DELETE FROM productos WHERE id = %s '
+                entrada = input('Digite el numero de id de producto a eliminar: ')
+                valores = (entrada,)
+                cursor.execute(sentencia, valores)  # De esta manera ejecutamos la sentencia
+                registros_eliminados = cursor.rowcount
+                print(f'El producto eliminado es: {registros_eliminados}')
+    except Exception as e:
+        print(f'Ocurrio un error: {e}')
+    finally:
+        conexion.close()
