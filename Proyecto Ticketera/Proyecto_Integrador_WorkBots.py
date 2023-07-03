@@ -75,3 +75,72 @@ def crear_tablas():
             if conexion is not None:
                 conexion.close()
                 print("Conexión cerrada")
+
+# Función para obtener precio del producto
+def obtener_precio_producto(producto_id):
+    conexion = establecer_conexion()
+    if conexion is not None:
+        try:
+            cursor = conexion.cursor()
+            # consultar el precio del producto en la bd
+
+            cursor.execute("SELECT precio FROM productos WHERE id = %s", (producto_id))
+            result = cursor.fetchone()
+            if result:
+                precio = int(result[0])
+                return precio
+            else:
+                return None
+        except (Exception, psycopg2.Error) as error:
+            print("Error en la busqueda de precio de producto: ", error)
+        finally:
+            if conexion is not None:
+                conexion.close()
+                print("Conexión cerrada")
+
+
+#funcion para obtener la descripcion del producto
+def obtener_descripcion_producto(producto_id):
+    conexion = establecer_conexion()
+
+    if conexion is not None:
+        try:
+            cursor = conexion.cursor()
+            # consultar el precio del producto en la bd
+            cursor.execute("SELECT descripcion FROM productos WHERE id = %s", (producto_id))
+            result = cursor.fetchone()
+            if result:
+                descripcion = result[0]
+                return descripcion
+            else:
+                return None
+        except (Exception, psycopg2.Error) as error:
+            print("Error en la busqueda de descripcion de producto: ", error)
+        finally:
+            if conexion is not None:
+                conexion.close()
+                print("Conexión cerrada")
+
+
+# Función para insertar un cliente en la base de datos
+def insertar_cliente(nombre):
+    conexion = establecer_conexion()
+    if conexion is not None:
+        try:
+            cursor = conexion.cursor()
+
+            insertar_cliente = """
+            INSERT INTO clientes (nombre)
+            VALUES (%s)
+            """
+            cursor.execute(insertar_cliente, (nombre,))
+            conexion.commit()
+
+            cursor.close()
+            print("Cliente insertado correctamente")
+        except (Exception, psycopg2.Error) as error:
+            print("Error al insertar el cliente:", error)
+        finally:
+            if conexion is not None:
+                conexion.close()
+                print("Conexión cerrada")
