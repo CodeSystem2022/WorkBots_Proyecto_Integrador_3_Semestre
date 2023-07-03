@@ -262,3 +262,75 @@ def BorrarProdBD():
         print(f'Ocurrio un error: {e}')
     finally:
         conexion.close()
+
+
+#funcion de impresion de ticket para compra en efectivo
+def mostrarTicketEfe(productos: List[Producto]):
+    fecha = datetime.datetime.now()
+    print("-" * 106)
+    print("                                                        Supermercados")
+    print("   *        *       *    * * *     * * * *      *    *         * * *      * * *    * * * * *    * * *     ")
+    print("    *     *  *     *    *     *    *       *    *   *          *     *   *     *       *       *          ")
+    print("     *   *    *   *     *     *    * * *  *     * *            * * * *   *     *       *        * * *     ")
+    print("      * *      * *      *     *    *       *    *   *          *     *   *     *       *              *   ")
+    print("       *        *        * * *     *       *    *    *         * * *      * * *        *        * * *     ")
+    print(" ")
+    print("Workbots S. A.")
+    print("CUIT: 30-123456789-0")
+    print("Domicilio comercial: Av. J. J. Urquiza 314, San Rafael, Mendoza")
+    print("IVA Responsable inscripto")
+    print(" ")
+    print("-" * 106)
+    print("Fecha:", fecha)
+    print("Condicion de venta: Efectivo")
+    print("-" * 106)
+    print("Ticket factura B")
+    print("Consumidor final")
+    print("-" * 106)
+    print(" ")
+    print("|%-20s|%-20s|%-20s|%-20s|" % ("Descripción", "Precio", "Cantidad", "Subtotal"))
+    print("-" * 85)
+    total = 0
+
+    total = sum(p.subtotal for p in productos)
+
+    for p in productos:
+        print("|{:20s}|{:20f}|{:20f}|{:20f}|".format(p.descripcion, p.cantidad, p.precio,  p.subtotal))
+
+    print("-" * 85)
+    print("|%83s|" % ("Total: " + str(total)))
+    print("|%83s|" % ("Impuestos: " + str(total - total / 1.21)))
+
+#funcion de impresion de ticket para compra en debito
+def mostrarTicketDebit(productos: List[Producto]):
+    fecha = datetime.datetime.now()
+    print("-" * 106)
+    print("                                                        Supermercados")
+    print("   *        *       *    * * *     * * * *      *    *         * * *      * * *    * * * * *    * * *     ")
+    print("    *     *  *     *    *     *    *       *    *   *          *     *   *     *       *       *          ")
+    print("     *   *    *   *     *     *    * * *  *     * *            * * * *   *     *       *        * * *     ")
+    print("      * *      * *      *     *    *       *    *   *          *     *   *     *       *              *   ")
+    print("       *        *        * * *     *       *    *    *         * * *      * * *        *        * * *     ")
+    print(" ")
+    print("Workbots S. A.")
+    print("CUIT: 30-123456789-0")
+    print("Domicilio comercial: Av. J. J. Urquiza 314, San Rafael, Mendoza")
+    print("IVA Responsable inscripto")
+    print(" ")
+    print("-" * 106)
+    print("Fecha:", fecha)
+    print("Condicion de venta: Debito")
+    print("-" * 106)
+    print("Ticket factura B")
+    print("Consumidor final")
+    print("-" * 106)
+    print(" ")
+    print("|%-20s|%-20s|%-20s|%-20s|" % ("Descripción", "Precio", "Cantidad", "Subtotal"))
+    print("-" * 85)
+    total = 0
+    total = sum(p.subtotal for p in productos)
+    for p in productos:
+        print("|{:20s}|{:20f}|{:20f}|{:20f}|".format(p.descripcion, p.cantidad, p.precio, p.subtotal))
+    print("-" * 85)
+    print("|%83s|" % ("Total: " + str(total)))
+    print("|%83s|" % ("Impuestos: " + str(total - total / 1.21)))
